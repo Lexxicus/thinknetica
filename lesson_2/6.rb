@@ -2,7 +2,6 @@ shop_cart = {}
 cart_price = {}
 sum = 0
 loop do
-  
   print 'Введите название товара (Стоп для выхода): '
   item = gets.chomp.capitalize
   break if item == 'Стоп'
@@ -11,19 +10,17 @@ loop do
   print 'Укажите количество: '
   qnt = gets.to_f 
   shop_cart[item] =  {price: price, qnt: qnt}
-
 end
 
-shop_cart.each do |key, value|
-  a_piece = value[:price] * value[:qnt]
-  cart_price[key] = a_piece
+shop_cart.each do |item, price_qnt|
+  a_piece = price_qnt[:price] * price_qnt[:qnt]
+  cart_price[item] = a_piece
   sum += a_piece
+  puts "#{item} цена: #{price_qnt[:price]}, количество: #{price_qnt[:qnt]} "
 end
 
-shop_cart.each do |key, value|
-  puts "#{key} цена: #{value[:price]}, количество: #{value[:qnt]} "
+cart_price.each do |name, price|
+  puts "#{name} цена: #{price} "
 end
-cart_price.each do |key, value|
-  puts "#{key} цена: #{value} "
-end
+
 puts "Цена всей корзины #{sum}"
