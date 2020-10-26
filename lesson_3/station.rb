@@ -1,6 +1,6 @@
 # Station class
 class Station
-  attr_reader :name
+  attr_reader :name, :trains
 
   def initialize(name)
     @name = name
@@ -11,28 +11,24 @@ class Station
     @trains << train
   end
 
-  def all_trains
-    @trains.each { |train| puts "Поезд номер: #{train.number}" }
-  end
-
   def trains_types
-    pas, cargo = 0
+    passanger = []
+    cargo = []
     @trains.each do |train|
       if train.type == 'pas'
-        pas += 1
+        passanger << train
       else
-        cargo += 1
+        cargo << train
       end
     end
-    puts "Всего пассажирских поездов: #{pas}"
-    puts "Всего грузовых поездов: #{cargo}"
+    trains_types = { passanger: passanger, cargo: cargo }
   end
 
   def del_train(train)
     @trains.delete(train)
   end
 
-  def move_train(train)
+  def move_train
     train.move_forward if @tarins.include?(tarin)
   end
 end

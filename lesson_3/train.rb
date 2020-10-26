@@ -1,6 +1,6 @@
 # initial class commit
 class Train
-  attr_reader :number, :type, :wagons, :speed, :current_station
+  attr_reader :number, :type, :wagons, :speed, :current_station, :route
 
   def initialize(number, type, wagons)
     @number = number
@@ -19,13 +19,12 @@ class Train
     @speed = 0
   end
 
-  def carriage_managment(operation)
-    if @speed.zero?
-      @wagons += 1 if operation == 'add'
-      @wagons -= 1 if operation == 'remove'
-    else
-      puts 'Операция не возможна во время движения поезда'
-    end
+  def add_wagon
+    @wagons += 1 if @speed.zero?
+  end
+
+  def remove_wagon
+    @wagons -= 1 if @speed.zero?
   end
 
   def add_route(route)
@@ -35,9 +34,9 @@ class Train
   end
 
   def move_forward
-    if !@route.nxt_station(@current_station).nil?
+    if !@route.next_station(@current_station).nil?
       @current_station.del_train(self)
-      @current_station = @route.nxt_station(@current_station)
+      @current_station = @route.next_station(@current_station)
       @current_station.add_train(self)
     else
       puts 'Поезд прибыл на конечную станцию'
@@ -57,7 +56,7 @@ class Train
   def print_station
     if !@route.nil?
       prev = @route.prev_station(@current_station)
-      nxt = @route.nxt_station(@current_station)
+      nxt = @route.next_station(@current_station)
       puts "Предыдущая станция: #{prev.name}" if !prev.nil?
       puts "Поезд находится тут: #{@current_station.name}"
       puts "Следующая станция: #{nxt.name}" if !nxt.nil?

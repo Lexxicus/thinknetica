@@ -5,9 +5,7 @@ class Route
   def initialize(starting_station, end_station)
     @starting_station = starting_station
     @end_station = end_station
-    @route = []
-    @route << @starting_station
-    @route << @end_station
+    @route = [@starting_station, @end_station]
   end
 
   def add_station(station)
@@ -18,7 +16,7 @@ class Route
     @route.delete(station)
   end
 
-  def nxt_station(station)
+  def next_station(station)
     index = @route.find_index(station) + 1
     @route[index] if index <= @route.size
   end
