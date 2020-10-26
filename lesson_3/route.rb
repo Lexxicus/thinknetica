@@ -24,7 +24,12 @@ class Route
   end
 
   def prev_station(station)
-    index = @route.find_index(station) - 1
-    @route[index] if index > 0
+    index = @route.find_index(station)
+    if index.zero?
+      index
+    else
+      index -= 1
+    end
+    @route[index] if index >= 0
   end
 end
