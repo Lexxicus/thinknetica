@@ -28,7 +28,7 @@ class Station
     @trains.delete(train)
   end
 
-  def move_train
-    train.move_forward if @tarins.include?(tarin)
+  def move_train(train)
+    del_train(train)
   end
 end

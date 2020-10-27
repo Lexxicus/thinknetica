@@ -33,10 +33,21 @@ class Train
     @current_station = @route.starting_station
   end
 
+  def next_station
+    index = @route.stations.index(@current_station)
+    @route.stations[index + 1] if index <= @route.stations.size
+  end
+
+  def prev_station
+    index = @route.stations.index(@current_station)
+    return if index.zero?
+    @route.stations[index - 1]
+  end
+
   def move_forward
-    if !@route.next_station(@current_station).nil?
+    if !next_station.nil?
       @current_station.del_train(self)
-      @current_station = @route.next_station(@current_station)
+      @current_station = next_station
       @current_station.add_train(self)
     else
       puts 'Поезд прибыл на конечную станцию'
@@ -44,9 +55,9 @@ class Train
   end
 
   def move_back
-    if !@route.prev_station(@current_station).nil?
+    if !prev_station.nil?
       @current_station.del_train(self)
-      @current_station = @route.prev_station(@current_station)
+      @current_station = prev_station
       @current_station.add_train(self)
     else
       puts 'Начальная точка маршрута'
@@ -57,9 +68,9 @@ class Train
     if !@route.nil?
       prev = @route.prev_station(@current_station)
       nxt = @route.next_station(@current_station)
-      puts "Предыдущая станция: #{prev.name}" if !prev.nil?
+      puts "Предыдущая станция: #{prev.name}" unless prev.nil?
       puts "Поезд находится тут: #{@current_station.name}"
-      puts "Следующая станция: #{nxt.name}" if !nxt.nil?
+      puts "Следующая станция: #{nxt.name}" unless nxt.nil?
     else
       puts 'no route'
     end
