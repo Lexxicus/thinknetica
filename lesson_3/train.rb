@@ -72,7 +72,7 @@ class Train
       puts "Поезд находится тут: #{@current_station.name}"
       puts "Следующая станция: #{nxt.name}" unless nxt.nil?
     else
-      puts 'no route'
+      puts 'Маршрут не задан'
     end
   end
 end
