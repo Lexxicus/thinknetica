@@ -8,10 +8,10 @@ class Station
   end
 
   def add_train(train)
-    @trains << train
+    trains << train
   end
 
-  def trains_types
+  def trains_by_type
     passanger = []
     cargo = []
     @trains.each do |train|
@@ -21,14 +21,10 @@ class Station
         cargo << train
       end
     end
-    trains_types = { passanger: passanger, cargo: cargo }
+    { passanger: passanger, cargo: cargo }
   end
 
   def del_train(train)
     @trains.delete(train)
-  end
-
-  def move_train(train)
-    del_train(train)
   end
 end

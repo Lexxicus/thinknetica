@@ -45,7 +45,9 @@ class Train
   end
 
   def move_forward
-    if !next_station.nil?
+    if @route.nil?
+      puts 'Маршрут не задан'
+    elsif next_station
       @current_station.del_train(self)
       @current_station = next_station
       @current_station.add_train(self)
@@ -55,7 +57,9 @@ class Train
   end
 
   def move_back
-    if !prev_station.nil?
+    if @route.nil?
+      puts 'Маршрут не задан'
+    elsif prev_station
       @current_station.del_train(self)
       @current_station = prev_station
       @current_station.add_train(self)
@@ -64,13 +68,11 @@ class Train
     end
   end
 
-  def print_station
-    if !@route.nil?
-      prev = @route.prev_station(@current_station)
-      nxt = @route.next_station(@current_station)
-      puts "Предыдущая станция: #{prev.name}" unless prev.nil?
+  def print_stations
+    if @route
+      puts "Предыдущая станция: #{prev_station.name}" unless prev_station.nil?
       puts "Поезд находится тут: #{@current_station.name}"
-      puts "Следующая станция: #{nxt.name}" unless nxt.nil?
+      puts "Следующая станция: #{next_station.name}" unless next_station.nil?
     else
       puts 'Маршрут не задан'
     end
