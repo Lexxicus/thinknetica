@@ -6,14 +6,6 @@ class PassangerTrain < Train
     @wagons = []
   end
 
-  def add_wagon(wagon)
-    if wagon.type == :passenger
-      super
-    else
-      puts 'Разрешена сцепка только с пассажирскими вагонами'
-    end
-  end
-
   protected
 
   def max_train_speed
