@@ -1,14 +1,25 @@
 # initial class commit
 class Train
+  include InstanceCounter
   attr_reader :number, :type, :wagons, :speed, :current_station, :route
-
-  def initialize(number)
+  @@trains = {}
+  def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
     @speed = 0
     @route = nil
     @current_station = 0
+    @@trains[@number] = self
+    register_instance
+  end
+
+  def self.all
+    @@trains
+  end
+
+  def self.find(number)
+    @@trains[number]
   end
 
   def add_route(route)

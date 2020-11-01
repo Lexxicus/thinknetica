@@ -1,8 +1,6 @@
 # init commit
 class Interface
   def initialize
-    @stations = {}
-    @trains = {}
     @routes = {}
   end
 
@@ -41,6 +39,10 @@ class Interface
         move_train
       when 8
         list_of_stations_trains
+      when 9
+        instances
+      when 10
+        seed
       end
     end
   end
@@ -50,7 +52,7 @@ class Interface
   def create_station
     puts 'Укажите название будующей станции:'
     name = gets.chomp
-    @stations[name] = Station.new(name)
+    Station.new(name)
     puts "Построена станция #{name}"
   end
 
@@ -59,8 +61,8 @@ class Interface
     number = gets.chomp
     puts 'Для пассажирского поезда введите 1, для грузового 2'
     type = gets.to_i
-    @trains[number] = PassangerTrain.new(number) if type == 1
-    @trains[number] = CargoTrain.new(number) if type == 2
+    PassangerTrain.new(number) if type == 1
+    CargoTrain.new(number) if type == 2
   end
 
   def create_route
@@ -68,13 +70,13 @@ class Interface
     starting_station = gets.chomp
     puts 'Укажите название конечной станции: '
     end_station = gets.chomp
-    if @stations[starting_station].nil?
+    if Station.all[starting_station].nil?
       puts "Такой станции #{starting_station} не существует"
-    elsif @stations[end_station].nil?
+    elsif Station.all[end_station].nil?
       puts "Такой станции #{end_station} не существует"
     else
       route_name = "#{starting_station}-#{end_station}"
-      @routes[route_name] = Route.new(@stations[starting_station], @stations[end_station])
+      @routes[route_name] = Route.new(Station.all[starting_station], Station.all[end_station])
       puts "Маршрут #{route_name} создан"
     end
   end
@@ -87,13 +89,13 @@ class Interface
     else
       puts 'Укажите название станции:'
       input = gets.chomp
-      if @stations[input].nil?
+      if Station.all.nil?
         puts 'Станция не создана'
       else
         puts 'Введите add для добавления станции, remove для удаления'
         command = gets.chomp
-        @routes[route_name].add_station(@stations[input]) if command == 'add'
-        @routes[route_name].del_station(@stations[input]) if command == 'remove'
+        @routes[route_name].add_station(Station.all[input]) if command == 'add'
+        @routes[route_name].del_station(Station.all[input]) if command == 'remove'
       end
     end
   end
@@ -114,55 +116,71 @@ class Interface
     number = gets.chomp
     puts 'Укажите название маршрута: '
     route_name = gets.chomp
-    if @trains[number].nil?
+    if Train.find(number).nil?
       puts 'Поезд с таким номером не существует'
     elsif @routes[route_name].nil?
       puts 'Маршрут не задан'
     else
-      puts @trains[number].add_route(@routes[route_name])
+      puts Train.find(number).add_route(@routes[route_name])
     end
   end
 
   def add_wagon_to_train
     puts 'Укажите номер поезда'
     number = gets.chomp
-    if @trains[number].nil?
+    if Train.find(number).nil?
       puts 'Поезд с таким номером не существует'
     else
-      puts @trains[number].add_wagon(PassangerWagon.new) if @trains[number].type == :passanger
-      puts @trains[number].add_wagon(CargoWagon.new) if @trains[number].type == :cargo
+      puts Train.find(number).add_wagon(PassangerWagon.new) if @trains[number].type == :passanger
+      puts Train.find(number).add_wagon(CargoWagon.new) if @trains[number].type == :cargo
     end
   end
 
   def remove_wagon_to_train
     puts 'Укажите номер поезда'
     number = gets.chomp
-    if @trains[number].nil?
+    if Train.find(number).nil?
       puts 'Поезд с таким номером не существует'
-    elsif @trains[number].wagons.empty?
+    elsif Train.find(number).wagons.empty?
       puts 'У поезда нет вагонов'
     else
-      @trains[number].remove_wagon
+      Train.find(number).remove_wagon
     end
   end
 
   def move_train
     puts 'Укажите номер поезда'
     number = gets.chomp
-    if @trains[number].nil?
+    if Train.find(number).nil?
       puts 'Поезд с таким номером не существует'
     else
       puts 'Для движения по маршруту задайте на правление вперёд или назад'
       direction = gets.chomp
-      puts @trains[number].move_forward if direction == 'вперёд'
-      puts @trains[number].move_back if direction == 'назад'
+      puts Train.find(number).move_forward if direction == 'вперёд'
+      puts Train.find(number).move_back if direction == 'назад'
     end
   end
 
   def list_of_stations_trains
-    puts "Всего станций #{@stations.size}, названия:"
-    @stations.each_key { |station_name| puts station_name }
-    puts "Всего поездов #{@trains.size}, номера: "
-    @trains.each_key { |train_number| puts train_number }
+    puts "Всего станций #{Station.all.size}, названия:"
+    Station.all.each_key { |station_name| puts station_name }
+    puts "Всего поездов #{Train.all.size}, номера: "
+    Train.all.each_key { |train_number| puts train_number }
+  end
+
+  def instances
+    puts "Экземпляров класса Станция создано: #{Station.instances}"
+    puts "Экземпляров класса Поезд создано: #{Train.instances}, pass #{PassangerTrain.instances}, cargo #{CargoTrain.instances}"
+  end
+
+  def seed
+    Station.new('kgn')
+    Station.new('ekb')
+    Station.new('ekb')
+    Station.new('msk')
+    PassangerTrain.new('123')
+    CargoTrain.new('124')
+    @routes['kgn-msk'] = Route.new(Station.all['kgn'], Station.all['msk'])
+    @routes['msk-kgn'] = Route.new(Station.all['msk'], Station.all['kgn'])
   end
 end

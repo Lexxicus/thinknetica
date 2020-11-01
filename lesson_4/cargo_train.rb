@@ -1,9 +1,7 @@
 # init commit
 class CargoTrain < Train
   def initialize(number)
-    @number = number
-    @type = :passenger
-    @wagons = []
+    super(number, :cargo)
   end
 
   protected

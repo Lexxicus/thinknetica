@@ -1,6 +1,5 @@
 # init commit
-class PassangerWagon
-  attr_reader :type
+class PassangerWagon < Wagon
   def initialize
     @type = :passenger
   end
