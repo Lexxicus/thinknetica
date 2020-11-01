@@ -1,6 +1,6 @@
 # init commit
 class PassangerWagon < Wagon
   def initialize
-    @type = :passenger
+    super(:passenger)
   end
 end
