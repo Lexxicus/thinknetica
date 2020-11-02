@@ -70,13 +70,13 @@ class Interface
     starting_station = gets.chomp
     puts 'Укажите название конечной станции: '
     end_station = gets.chomp
-    if Station.all[starting_station].nil?
+    if Station.stations[starting_station].nil?
       puts "Такой станции #{starting_station} не существует"
-    elsif Station.all[end_station].nil?
+    elsif Station.stations[end_station].nil?
       puts "Такой станции #{end_station} не существует"
     else
       route_name = "#{starting_station}-#{end_station}"
-      @routes[route_name] = Route.new(Station.all[starting_station], Station.all[end_station])
+      @routes[route_name] = Route.new(Station.stations[starting_station], Station.stations[end_station])
       puts "Маршрут #{route_name} создан"
     end
   end
@@ -89,13 +89,13 @@ class Interface
     else
       puts 'Укажите название станции:'
       input = gets.chomp
-      if Station.all.nil?
+      if Station.stations.nil?
         puts 'Станция не создана'
       else
         puts 'Введите add для добавления станции, remove для удаления'
         command = gets.chomp
-        @routes[route_name].add_station(Station.all[input]) if command == 'add'
-        @routes[route_name].del_station(Station.all[input]) if command == 'remove'
+        @routes[route_name].add_station(Station.stations[input]) if command == 'add'
+        @routes[route_name].del_station(Station.stations[input]) if command == 'remove'
       end
     end
   end
@@ -162,9 +162,9 @@ class Interface
   end
 
   def list_of_stations_trains
-    puts "Всего станций #{Station.all.size}, названия:"
+    puts "Всего станций #{Station.stations.size}, названия:"
     Station.all.each_key { |station_name| puts station_name }
-    puts "Всего поездов #{Train.all.size}, номера: "
+    puts "Всего поездов #{Train.tarins.size}, номера: "
     Train.all.each_key { |train_number| puts train_number }
   end
 
@@ -180,7 +180,7 @@ class Interface
     Station.new('msk')
     PassangerTrain.new('123')
     CargoTrain.new('124')
-    @routes['kgn-msk'] = Route.new(Station.all['kgn'], Station.all['msk'])
-    @routes['msk-kgn'] = Route.new(Station.all['msk'], Station.all['kgn'])
+    @routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk'])
+    @routes['msk-kgn'] = Route.new(Station.stations['msk'], Station.stations['kgn'])
   end
 end

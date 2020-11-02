@@ -6,9 +6,11 @@ module InstanceCounter
   end
   # commit
   module ClassMethods
-    attr_reader :instances
+    def instances
+      @instances || 0
+    end
 
-    def register_instance
+    def instances_increment
       @instances ||= 0
       @instances += 1
     end
@@ -18,7 +20,7 @@ module InstanceCounter
     protected
 
     def register_instance
-      self.class.register_instance
+      self.class.instances_increment
     end
   end
 end
