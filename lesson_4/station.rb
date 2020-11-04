@@ -1,14 +1,16 @@
 # Station class
 class Station
   include InstanceCounter
+  include Valid
   attr_reader :name, :trains
   def self.stations
-    @stations || {}
+    @stations ||= {}
   end
 
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     self.class.stations[@name] = self
     register_instance
   end
@@ -32,5 +34,11 @@ class Station
 
   def del_train(train)
     @trains.delete(train)
+  end
+
+  protected
+
+  def validate!
+    raise 'Name should be atleast 3 symbols lengrh' if name.size < 3
   end
 end

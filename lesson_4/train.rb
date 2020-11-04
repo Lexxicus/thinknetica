@@ -1,11 +1,12 @@
 # initial class commit
 class Train
   include InstanceCounter
+  include Valid
   attr_reader :number, :type, :wagons, :speed, :current_station, :route
   def self.trains
-    @trains || {}
+    @trains ||= {}
   end
-
+  REGEXP_TRAIN_NUMBER = /^[a-z0-9]{3}-*[0-9]{2}/i
   def initialize(number, type)
     @number = number
     @type = type
@@ -13,6 +14,7 @@ class Train
     @speed = 0
     @route = nil
     @current_station = 0
+    validate!
     self.class.trains[@number] = self
     register_instance
   end
@@ -98,6 +100,10 @@ class Train
   end
 
   protected
+
+  def validate!
+    raise 'Number format: XXXXX or XXX-XX' if number !~ REGEXP_TRAIN_NUMBER
+  end
 
   def max_train_speed
     50

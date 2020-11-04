@@ -54,6 +54,9 @@ class Interface
     name = gets.chomp
     Station.new(name)
     puts "Построена станция #{name}"
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
   def create_train
@@ -61,8 +64,12 @@ class Interface
     number = gets.chomp
     puts 'Для пассажирского поезда введите 1, для грузового 2'
     type = gets.to_i
-    PassangerTrain.new(number) if type == 1
-    CargoTrain.new(number) if type == 2
+    train = PassangerTrain.new(number) if type == 1
+    train = CargoTrain.new(number) if type == 2
+    puts "Создан #{train.type == :passanger ? 'пассажирский' : 'грузовой'} поезд № #{number}"
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
   def create_route
@@ -79,6 +86,9 @@ class Interface
       @routes[route_name] = Route.new(Station.stations[starting_station], Station.stations[end_station])
       puts "Маршрут #{route_name} создан"
     end
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
   def filling_route
@@ -178,8 +188,8 @@ class Interface
     Station.new('ekb')
     Station.new('ekb')
     Station.new('msk')
-    PassangerTrain.new('123')
-    CargoTrain.new('124')
+    PassangerTrain.new('12345')
+    CargoTrain.new('12467')
     @routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk'])
     @routes['msk-kgn'] = Route.new(Station.stations['msk'], Station.stations['kgn'])
   end
