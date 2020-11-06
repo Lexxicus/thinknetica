@@ -14,7 +14,9 @@ class Interface
       5. Добавить вагон к поезду
       6. Отцепить вагон от поезда
       7. Перемещать поезд по маршруту
-      8. Просмотреть список станций и список поездов на станции
+      8. Просмотреть список поездов на станции
+      9. Посмотреть состав поезда
+      10. Занимать место или объем в вагоне
     )
 
     loop do
@@ -38,10 +40,12 @@ class Interface
       when 7
         move_train
       when 8
-        list_of_stations_trains
+        trains_on_station
       when 9
-        instances
+        list_of_wagons
       when 10
+        put_in_wagon
+      when 11
         seed
       end
     end
@@ -141,8 +145,10 @@ class Interface
     if Train.find(number).nil?
       puts 'Поезд с таким номером не существует'
     else
-      puts Train.find(number).add_wagon(PassangerWagon.new) if @trains[number].type == :passanger
-      puts Train.find(number).add_wagon(CargoWagon.new) if @trains[number].type == :cargo
+      puts "Укажите #{Train.find(number).type == :passanger ? 'количество посадочных мест' : 'грузоподъемность'} вагона"
+      value = gets.to_i
+      puts Train.find(number).add_wagon(PassangerWagon.new(value)) if Train.find(number).type == :passanger
+      puts Train.find(number).add_wagon(CargoWagon.new(value)) if Train.find(number).type == :cargo
     end
   end
 
@@ -171,16 +177,60 @@ class Interface
     end
   end
 
-  def list_of_stations_trains
-    puts "Всего станций #{Station.stations.size}, названия:"
-    Station.all.each_key { |station_name| puts station_name }
-    puts "Всего поездов #{Train.tarins.size}, номера: "
-    Train.all.each_key { |train_number| puts train_number }
+  def trains_on_station
+    puts 'Введите название станции:'
+    station_name = gets.chomp
+    if Station.stations[station_name].nil?
+      puts 'Станция не создана'
+    else
+      t_list = proc do |train| 
+        puts "Поезд № #{train.number}, #{train.type == :passanger ? 'пассажирский' : 'грузовой'}, вагонов #{train.wagons.size} "
+      end
+      puts 'Поезда на станции: '
+      Station.stations[station_name].trains_list(&t_list)
+    end
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
-  def instances
-    puts "Экземпляров класса Станция создано: #{Station.instances}"
-    puts "Экземпляров класса Поезд создано: #{Train.instances}, pass #{PassangerTrain.instances}, cargo #{CargoTrain.instances}"
+  def list_of_wagons
+    puts 'Введите номер поезда:'
+    train_number = gets.chomp
+    if Train.find(train_number).nil?
+      puts 'Поезда с таким номером не существует'
+    else
+      w_list = proc do |wagon|
+        if wagon.type == :passanger
+          puts "Вагон №#{wagon.wagon_number}, свободных мест: #{wagon.free_places}, занятых: #{wagon.occupied_places}"
+        else
+          puts "Вагон №#{wagon.wagon_number}, объём: #{wagon.volume}, занято: #{wagon.filled_in}"
+        end
+      end
+      puts 'Перечень вагонов подвижного состава: '
+      Train.find(train_number).wagons_list(&w_list)
+    end
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
+  end
+
+  def put_in_wagon
+    puts 'Введите номер поезда:'
+    train_number = gets.chomp
+    train = Train.find(train_number)
+    if train.nil? || train.wagons.empty?
+      puts 'Поезд Шредингера'
+    else
+      puts 'Введите номер вагона'
+      wagon_number = gets.to_i
+      raise 'нет такого вагона' if train.wagons[wagon_number].nil?
+      train.wagons[wagon_number].take_the_place if train.type == :passanger
+      train.wagons[wagon_number].load_wagon(1) if train.type == :cargo
+    end
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
   def seed
@@ -188,8 +238,12 @@ class Interface
     Station.new('ekb')
     Station.new('ekb')
     Station.new('msk')
-    PassangerTrain.new('12345')
-    CargoTrain.new('12467')
+    cr = CargoTrain.new('12467')
+    pr = PassangerTrain.new('12342')
+    10.times { cr.add_wagon(CargoWagon.new(20)) }
+    10.times { pr.add_wagon(PassangerWagon.new(37)) }
+    Station.stations['kgn'].add_train(pr)
+    Station.stations['kgn'].add_train(cr)
     @routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk'])
     @routes['msk-kgn'] = Route.new(Station.stations['msk'], Station.stations['kgn'])
   end

@@ -3,24 +3,27 @@ class Train
   include InstanceCounter
   include Valid
   attr_reader :number, :type, :wagons, :speed, :current_station, :route
-  def self.trains
-    @trains ||= {}
-  end
+  @@trains = {}
   REGEXP_TRAIN_NUMBER = /^[a-z0-9]{3}-*[0-9]{2}/i
+
   def initialize(number, type)
     @number = number
     @type = type
-    @wagons = []
+    @wagons = {}
     @speed = 0
     @route = nil
     @current_station = 0
     validate!
-    self.class.trains[@number] = self
+    @@trains[@number] = self
     register_instance
   end
 
   def self.find(number)
-    trains[number]
+    @@trains[number]
+  end
+
+  def self.all
+    @@tarins
   end
 
   def add_route(route)
@@ -40,15 +43,20 @@ class Train
 
   def add_wagon(wagon)
     if wagon.type == @type
-      @wagons.push(wagon)
+      @wagons[wagon.wagon_number] = wagon
       'Вагон прицеплен к составу'
     else
       'Неверный тип вагона'
     end
   end
 
-  def remove_wagon
-    @wagons.pop
+  def wagons_list(&block)
+    raise 'Состав не укомлектован' if @wagons.empty?
+    @wagons.each_value { |wagon| yield(wagon) }
+  end
+
+  def remove_wagon(wagon)
+    @wagons.delete(wagon)
     'Вагон отцеплен'
   end
 

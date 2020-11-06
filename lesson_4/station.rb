@@ -36,6 +36,11 @@ class Station
     @trains.delete(train)
   end
 
+  def trains_list(&block)
+    raise 'На станции нет поездов' if @trains.empty?
+    @trains.each { |tarin| yield(tarin) }
+  end
+
   protected
 
   def validate!
