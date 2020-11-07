@@ -37,7 +37,6 @@ class Station
   end
 
   def trains_list(&block)
-    raise 'На станции нет поездов' if @trains.empty?
     @trains.each { |tarin| yield(tarin) }
   end
 

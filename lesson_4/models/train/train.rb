@@ -30,7 +30,6 @@ class Train
     @route = route
     @route.starting_station.add_train(self)
     @current_station = @route.starting_station
-    'Маршрут назначке'
   end
 
   def speed_up
@@ -42,12 +41,8 @@ class Train
   end
 
   def add_wagon(wagon)
-    if wagon.type == @type
-      @wagons[wagon.wagon_number] = wagon
-      'Вагон прицеплен к составу'
-    else
-      'Неверный тип вагона'
-    end
+    @wagons[wagon.wagon_number] = wagon if wagon.type == @type
+    wagon
   end
 
   def wagons_list(&block)
@@ -57,7 +52,6 @@ class Train
 
   def remove_wagon(wagon)
     @wagons.delete(wagon)
-    'Вагон отцеплен'
   end
 
   def next_station
@@ -72,29 +66,17 @@ class Train
   end
 
   def move_forward
-    if @route.nil?
-      'Маршрут не задан'
-    elsif next_station
-      @current_station.del_train(self)
-      @current_station = next_station
-      @current_station.add_train(self)
-      "Поезд прибыл на станцию #{@current_station.name}"
-    else
-      'Поезд прибыл на конечную станцию'
-    end
+    raise 'Поезд на конечной станции' unless next_station
+    @current_station.del_train(self)
+    @current_station = next_station
+    @current_station.add_train(self)
   end
 
   def move_back
-    if @route.nil?
-      'Маршрут не задан'
-    elsif prev_station
-      @current_station.del_train(self)
-      @current_station = prev_station
-      @current_station.add_train(self)
-      "Поезд прибыл на станцию #{@current_station.name}"
-    else
-      'Начальная точка маршрута'
-    end
+    raise 'Начало маршрута' unless prev_station
+    @current_station.del_train(self)
+    @current_station = prev_station
+    @current_station.add_train(self)
   end
 
   def print_stations

@@ -174,7 +174,11 @@ class Interface
       direction = gets.chomp
       puts Train.find(number).move_forward if direction == 'вперёд'
       puts Train.find(number).move_back if direction == 'назад'
+      puts "Поезд на станции #{Train.find(number).current_station}"
     end
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
   end
 
   def trains_on_station
@@ -244,7 +248,7 @@ class Interface
     10.times { pr.add_wagon(PassangerWagon.new(37)) }
     Station.stations['kgn'].add_train(pr)
     Station.stations['kgn'].add_train(cr)
-    @routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk'])
+    pr.add_route(@routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk']))
     @routes['msk-kgn'] = Route.new(Station.stations['msk'], Station.stations['kgn'])
   end
 end
