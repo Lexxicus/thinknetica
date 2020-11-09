@@ -1,4 +1,7 @@
 require_relative 'modules/instance_counter'
+require_relative 'modules/menu_station'
+require_relative 'modules/menu_route'
+require_relative 'modules/menu_train'
 require_relative 'modules/ask'
 require_relative 'modules/valid'
 require_relative 'modules/manufacturer'
