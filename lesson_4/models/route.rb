@@ -21,6 +21,6 @@ class Route
   protected
 
   def validate!
-    raise 'The beginning and the end of the route are the same' if starting_station == end_station
+    raise 'The start & the end are the same' if starting_station == end_station
   end
 end

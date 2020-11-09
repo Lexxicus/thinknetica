@@ -46,7 +46,6 @@ class Train
   end
 
   def wagons_list(&block)
-    raise 'Состав не укомлектован' if @wagons.empty?
     @wagons.each_value { |wagon| yield(wagon) }
   end
 
@@ -80,13 +79,7 @@ class Train
   end
 
   def print_stations
-    if @route
-      "Предыдущая станция: #{prev_station.name}" unless prev_station.nil?
-      "Поезд находится тут: #{@current_station.name}"
-      "Следующая станция: #{next_station.name}" unless next_station.nil?
-    else
-      'Маршрут не задан'
-    end
+    [prev_station.name ||= 0, @current_station.name, next_station.name ||= 0]
   end
 
   protected

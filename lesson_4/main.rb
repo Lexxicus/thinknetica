@@ -1,4 +1,5 @@
 require_relative 'modules/instance_counter'
+require_relative 'modules/ask'
 require_relative 'modules/valid'
 require_relative 'modules/manufacturer'
 require_relative 'models/interface'
