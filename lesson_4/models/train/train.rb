@@ -2,9 +2,19 @@
 class Train
   include InstanceCounter
   include Valid
-  attr_reader :number, :type, :wagons, :speed, :current_station, :route
-  @@trains = {}
   REGEXP_TRAIN_NUMBER = /^[a-z0-9]{3}-*[0-9]{2}/i
+
+  attr_reader :number, :type, :wagons, :speed, :current_station, :route
+
+  @@trains = {}
+
+  def self.find(number)
+    @@trains[number]
+  end
+
+  def self.all
+    @@tarins
+  end
 
   def initialize(number, type)
     @number = number
@@ -16,14 +26,6 @@ class Train
     validate!
     @@trains[@number] = self
     register_instance
-  end
-
-  def self.find(number)
-    @@trains[number]
-  end
-
-  def self.all
-    @@tarins
   end
 
   def add_route(route)
@@ -45,7 +47,7 @@ class Train
     wagon
   end
 
-  def wagons_list(&block)
+  def wagons_list
     @wagons.each_value { |wagon| yield(wagon) }
   end
 
