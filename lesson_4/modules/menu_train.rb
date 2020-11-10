@@ -60,7 +60,9 @@ module MenuTrain
   def wagons_block(train)
     w_list = proc do |wagon|
       if wagon.type == :passanger
-        puts "Вагон № #{wagon.wagon_number} свободных мест: #{wagon.free_places}, занятых: #{wagon.occupied_places}"
+        puts "Вагон № #{wagon.wagon_number}"\
+          " свободных мест: #{wagon.free_places},"\
+          "занятых: #{wagon.occupied_places}"
       else
         puts "Вагон №#{wagon.wagon_number}, объём: #{wagon.volume}, занято: #{wagon.filled_in}"
       end

@@ -48,7 +48,13 @@ class Interface
     10.times { pr.add_wagon(PassangerWagon.new(37)) }
     Station.stations['kgn'].add_train(pr)
     Station.stations['kgn'].add_train(cr)
-    pr.add_route(@routes['kgn-msk'] = Route.new(Station.stations['kgn'], Station.stations['msk']))
-    @routes['msk-kgn'] = Route.new(Station.stations['msk'], Station.stations['kgn'])
+    pr.add_route(@routes['kgn-msk'] = Route.new(
+      Station.stations['kgn'],
+      Station.stations['msk']
+    ))
+    @routes['msk-kgn'] = Route.new(
+      Station.stations['msk'],
+      Station.stations['kgn']
+    )
   end
 end

@@ -12,7 +12,9 @@ module MenuStation
 
   def trains_block(station_name)
     t_list = proc do |train|
-      puts "Поезд № #{train.number}, #{train.type == :passanger ? 'пассажирский' : 'грузовой'}, вагонов #{train.wagons.size}"
+      puts "Поезд № #{train.number}," \
+      " #{train.type == :passanger ? 'пассажирский' : 'грузовой'}" \
+      ", вагонов #{train.wagons.size}"
     end
     Station.stations[station_name].trains_list(&t_list)
   end
