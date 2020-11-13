@@ -42,10 +42,4 @@ class Station
   def trains_list
     @trains.each { |tarin| yield(tarin) }
   end
-
-  #  protected
-
-  #  def validate!
-  #    raise 'Name should be atleast 3 symbols lengrh' if name.size < 3
-  #  end
 end
