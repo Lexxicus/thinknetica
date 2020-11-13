@@ -1,6 +1,5 @@
 # class initial commit
 class Route
-  include Valid
   attr_reader :starting_station, :end_station, :stations
 
   def initialize(starting_station, end_station)

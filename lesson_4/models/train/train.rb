@@ -1,10 +1,12 @@
 # initial class commit
 class Train
   include InstanceCounter
-  include Valid
+  include Validation
   REGEXP_TRAIN_NUMBER = /^[a-z0-9]{3}-*[0-9]{2}/i
 
   attr_reader :number, :type, :wagons, :speed, :current_station, :route
+
+  validate :number, :format, REGEXP_TRAIN_NUMBER
 
   @@trains = {}
 
@@ -86,9 +88,9 @@ class Train
 
   protected
 
-  def validate!
-    raise 'Number format: XXXXX or XXX-XX' if number !~ REGEXP_TRAIN_NUMBER
-  end
+  # def validate!
+  #  raise 'Number format: XXXXX or XXX-XX' if number !~ REGEXP_TRAIN_NUMBER
+  # end
 
   def max_train_speed
     50

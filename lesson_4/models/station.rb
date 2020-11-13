@@ -1,11 +1,14 @@
 # Station class
 class Station
   include InstanceCounter
-  include Valid
-  attr_reader :name, :trains
+  include Validation
+  include Accessors
+  attr_accessor_with_history :name, :trains
   def self.stations
     @stations ||= {}
   end
+
+  validate :name, :presence
 
   def initialize(name)
     @name = name
@@ -40,9 +43,9 @@ class Station
     @trains.each { |tarin| yield(tarin) }
   end
 
-  protected
+  #  protected
 
-  def validate!
-    raise 'Name should be atleast 3 symbols lengrh' if name.size < 3
-  end
+  #  def validate!
+  #    raise 'Name should be atleast 3 symbols lengrh' if name.size < 3
+  #  end
 end

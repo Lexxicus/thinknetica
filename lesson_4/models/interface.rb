@@ -7,6 +7,7 @@ class Interface
   def initialize
     @routes = {}
   end
+
   COM_LIST = {
     '1' => { label: 'Создать станцию', func: :create_station },
     '2' => { label: 'Создать поезд', func: :create_train },
@@ -32,12 +33,6 @@ class Interface
     end
   end
 
-  protected
-
-  def exit_programm
-    abort
-  end
-
   def seed
     Station.new('kgn')
     Station.new('che')
@@ -56,5 +51,11 @@ class Interface
       Station.stations['msk'],
       Station.stations['kgn']
     )
+  end
+
+  protected
+
+  def exit_programm
+    abort
   end
 end
